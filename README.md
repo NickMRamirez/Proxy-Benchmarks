@@ -4,7 +4,7 @@ Tests performance of various load balancers. Based on the blog post https://www.
 They are barebones, the same as what Loggly used.
 
 NOTE: I got VERY different results from what Loggly reported. They reported Envoy as being far ahead in performance. I saw that
-HAProxy is ahead.
+HAProxy is ahead. Note that you can install HAProxy using the packages here: https://haproxy.debian.net. The Terraform installation automates this.
 
 **IMPORTANT! Be sure to SSH into one of the VMs and run the test against the other VM from there. Running the test from within the AWS VPC will reduce Internet latency.**
 
