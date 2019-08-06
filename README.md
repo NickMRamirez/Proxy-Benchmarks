@@ -1,7 +1,6 @@
 # Benchmarks
 
-Tests performance of various load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/. I did not optimize the config files in any way.
-They are barebones, the same as what Loggly used.
+Tests performance of various load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/. Note that I did update the NGINX config to use `upstream` with a few recommended defaults so that it was somewhat more fair.
 
 NOTE: I got VERY different results from what Loggly reported. They reported Envoy as being far ahead in performance. I saw that
 HAProxy is ahead. Note that you can install HAProxy using the packages here: https://haproxy.debian.net. The Terraform installation automates this.
@@ -100,48 +99,47 @@ Status code distribution:
 
 ```
 Summary:
-  Total:        30.3802 secs
-  Slowest:      2.6397 secs
-  Fastest:      0.0004 secs
-  Average:      0.0538 secs
-  Requests/sec: 3291.6188
+  Total:        3.1544 secs
+  Slowest:      1.0094 secs
+  Fastest:      0.0002 secs
+  Average:      0.0076 secs
+  Requests/sec: 31702.2366
   
-  Total data:   15968288 bytes
-  Size/request: 159 bytes
+  Total data:   12700000 bytes
+  Size/request: 127 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.264 [95153] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.528 [1847]  |■
-  0.792 [997]   |
-  1.056 [1051]  |
-  1.320 [689]   |
-  1.584 [126]   |
-  1.848 [27]    |
-  2.112 [104]   |
-  2.376 [2]     |
-  2.640 [3]     |
+  0.101 [99994] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.202 [0]     |
+  0.303 [1]     |
+  0.404 [0]     |
+  0.505 [0]     |
+  0.606 [0]     |
+  0.707 [0]     |
+  0.808 [0]     |
+  0.909 [0]     |
+  1.009 [4]     |
 
 
 Latency distribution:
-  10% in 0.0047 secs
-  25% in 0.0076 secs
-  50% in 0.0116 secs
-  75% in 0.0213 secs
-  90% in 0.0464 secs
-  95% in 0.2534 secs
-  99% in 1.0256 secs
+  10% in 0.0015 secs
+  25% in 0.0037 secs
+  50% in 0.0068 secs
+  75% in 0.0100 secs
+  90% in 0.0141 secs
+  95% in 0.0176 secs
+  99% in 0.0275 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0004 secs, 2.6397 secs
+  DNS+dialup:   0.0000 secs, 0.0002 secs, 1.0094 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0531 secs
-  resp wait:    0.0537 secs, 0.0004 secs, 2.6397 secs
-  resp read:    0.0000 secs, 0.0000 secs, 0.0485 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0193 secs
+  resp wait:    0.0075 secs, 0.0002 secs, 1.0094 secs
+  resp read:    0.0001 secs, 0.0000 secs, 0.0080 secs
 
 Status code distribution:
-  [200] 79704 responses
-  [502] 20296 responses
+  [200] 100000 responses
 ```
 
 ### HAProxy (version 2.0)
