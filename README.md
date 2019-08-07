@@ -48,7 +48,7 @@ sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 
 ## Results using Hey
 
-![alt text](images/req_sec.png "Requests per second")
+![alt text](images/requests_per_second.png "Requests per second")
 
 ![alt text](images/latency.png "Latency")
 
