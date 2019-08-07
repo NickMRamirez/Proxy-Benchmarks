@@ -52,6 +52,8 @@ sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 
 ![alt text](images/latency.png "Latency")
 
+![alt text](images/cpu_usage.png "CPU Usage")
+
 ### Envoy (version 1.11.0)
 
 ```
