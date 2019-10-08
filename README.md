@@ -258,3 +258,8 @@ HAProxy:
 
 CPU: 63.3%
 Memory: 0.1%
+
+Traefik:
+
+CPU: 366%
+Memory: 0.5%
