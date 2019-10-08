@@ -195,6 +195,53 @@ Status code distribution:
   [200] 100000 responses
 ```
 
+### Traefik (version 2.0)
+
+```
+Summary:
+  Total:        4.0268 secs
+  Slowest:      0.2627 secs
+  Fastest:      0.0003 secs
+  Average:      0.0099 secs
+  Requests/sec: 24833.6670
+  
+  Total data:   30500000 bytes
+  Size/request: 305 bytes
+
+Response time histogram:
+  0.000 [1]     |
+  0.027 [99240] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.053 [580]   |
+  0.079 [66]    |
+  0.105 [107]   |
+  0.132 [0]     |
+  0.158 [0]     |
+  0.184 [0]     |
+  0.210 [0]     |
+  0.236 [4]     |
+  0.263 [2]     |
+
+
+Latency distribution:
+  10% in 0.0046 secs
+  25% in 0.0067 secs
+  50% in 0.0090 secs
+  75% in 0.0122 secs
+  90% in 0.0160 secs
+  95% in 0.0185 secs
+  99% in 0.0249 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.2627 secs
+  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0054 secs
+  resp wait:    0.0097 secs, 0.0003 secs, 0.2586 secs
+  resp read:    0.0001 secs, 0.0000 secs, 0.0063 secs
+
+Status code distribution:
+  [200] 100000 responses
+```
+
 ## CPU and Memory usage during tests
 
 Envoy:
