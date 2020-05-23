@@ -52,7 +52,7 @@ sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 
 ![alt text](images/requests_per_second.png "Requests per second")
 
-![alt text](images/avg_response_time.png "Average response time")
+![alt text](images/average_response_time.png "Average response time")
 
 ![alt text](images/latency.png "Latency")
 
@@ -62,48 +62,47 @@ sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 
 ```
 Summary:
-  Total:        63.5207 secs
-  Slowest:      4.5481 secs
-  Fastest:      0.0004 secs
-  Average:      0.1584 secs
-  Requests/sec: 1574.2896
+  Total:        7.0733 secs
+  Slowest:      0.2360 secs
+  Fastest:      0.0003 secs
+  Average:      0.0174 secs
+  Requests/sec: 14137.6327
   
-  Total data:   17136384 bytes
-  Size/request: 171 bytes
+  Total data:   18800000 bytes
+  Size/request: 188 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.455 [86732] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.910 [7721]  |■■■■
-  1.365 [3755]  |■■
-  1.819 [1352]  |■
-  2.274 [287]   |
-  2.729 [95]    |
-  3.184 [46]    |
-  3.639 [10]    |
-  4.093 [0]     |
-  4.548 [1]     |
+  0.024 [79772] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.047 [19204] |■■■■■■■■■■
+  0.071 [902]   |
+  0.095 [89]    |
+  0.118 [30]    |
+  0.142 [0]     |
+  0.165 [0]     |
+  0.189 [0]     |
+  0.212 [0]     |
+  0.236 [2]     |
 
 
 Latency distribution:
-  10% in 0.0085 secs
-  25% in 0.0168 secs
-  50% in 0.0251 secs
-  75% in 0.0428 secs
-  90% in 0.6543 secs
-  95% in 0.9590 secs
-  99% in 1.5680 secs
+  10% in 0.0063 secs
+  25% in 0.0119 secs
+  50% in 0.0159 secs
+  75% in 0.0220 secs
+  90% in 0.0292 secs
+  95% in 0.0336 secs
+  99% in 0.0477 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0004 secs, 4.5481 secs
+  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.2360 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0026 secs
-  resp wait:    0.1583 secs, 0.0004 secs, 4.5481 secs
-  resp read:    0.0000 secs, 0.0000 secs, 0.0046 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0028 secs
+  resp wait:    0.0173 secs, 0.0003 secs, 0.2325 secs
+  resp read:    0.0001 secs, 0.0000 secs, 0.0061 secs
 
 Status code distribution:
-  [200] 89252 responses
-  [502] 10748 responses
+  [200] 100000 responses
 ```
 
 
