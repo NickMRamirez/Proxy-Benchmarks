@@ -19,18 +19,18 @@ resource "aws_instance" "haproxy" {
 
   provisioner "file" {
     source      = "./haproxy/haproxy.cfg"
-    destination = "/home/ubuntu/haproxy.cfg"
+    destination = "/tmp/haproxy.cfg"
   }
 
   provisioner "file" {
     source      = "./haproxy/haproxy_setup.sh"
-    destination = "/home/ubuntu/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-        "chmod +x /home/ubuntu/setup.sh",
-        "sudo /home/ubuntu/setup.sh",
+        "chmod +x /tmp/setup.sh",
+        "sudo /tmp/setup.sh",
     ]
   }
 }

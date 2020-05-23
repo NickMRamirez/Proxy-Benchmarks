@@ -24,13 +24,13 @@ resource "aws_instance" "envoy" {
 
   provisioner "file" {
     source      = "./envoy/envoy_setup.sh"
-    destination = "/home/ubuntu/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-        "chmod +x /home/ubuntu/setup.sh",
-        "sudo /home/ubuntu/setup.sh",
+        "chmod +x /tmp/setup.sh",
+        "sudo /tmp/setup.sh",
     ]
   }
 }

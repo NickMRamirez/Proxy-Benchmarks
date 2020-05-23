@@ -13,7 +13,7 @@ if [ ! $(which docker) ]; then
 fi
 
 # Run the Docker container
-docker run --name envoy --rm -p 80:80 -v /tmp/envoy.yaml:/etc/envoy/envoy.yaml -d envoyproxy/envoy
+docker run --name envoy --rm -p 80:80 -v /tmp/envoy.yaml:/etc/envoy/envoy.yaml -d envoyproxy/envoy:v1.14.1
 
 # Install Hey
 wget -O hey https://storage.googleapis.com/hey-release/hey_linux_amd64

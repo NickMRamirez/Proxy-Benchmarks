@@ -13,7 +13,7 @@ if [ ! $(which docker) ]; then
 fi
 
 # Run the Docker container
-docker run -d -p 8080:8080 -p 80:80 -v /tmp/dynamic_conf.toml:/etc/traefik/dynamic_conf.toml -v /tmp/traefik.toml:/etc/traefik/traefik.toml traefik:v2.0
+docker run -d -p 8080:8080 -p 80:80 -v /tmp/dynamic_conf.toml:/etc/traefik/dynamic_conf.toml -v /tmp/traefik.toml:/etc/traefik/traefik.toml traefik:v2.2.1
 
 # Install Hey
 wget -O hey https://storage.googleapis.com/hey-release/hey_linux_amd64

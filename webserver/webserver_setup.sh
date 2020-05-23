@@ -14,5 +14,5 @@ else
 fi
 
 # Start web app
-cd /home/ubuntu
+cd /tmp
 sudo docker-compose up -d

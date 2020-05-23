@@ -29,13 +29,13 @@ resource "aws_instance" "traefik" {
 
   provisioner "file" {
     source      = "./traefik/traefik_setup.sh"
-    destination = "/home/ubuntu/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-        "chmod +x /home/ubuntu/setup.sh",
-        "sudo /home/ubuntu/setup.sh",
+        "chmod +x /tmp/setup.sh",
+        "sudo /tmp/setup.sh",
     ]
   }
 }

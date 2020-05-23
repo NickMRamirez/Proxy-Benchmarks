@@ -19,18 +19,18 @@ resource "aws_instance" "webserver" {
 
   provisioner "file" {
     source = "./webserver/docker-compose.yml"
-    destination = "/home/ubuntu/docker-compose.yml"
+    destination = "/tmp/docker-compose.yml"
   }
 
   provisioner "file" {
     source      = "./webserver/webserver_setup.sh"
-    destination = "/home/ubuntu/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-        "chmod +x /home/ubuntu/setup.sh",
-        "sudo /home/ubuntu/setup.sh",
+        "chmod +x /tmp/setup.sh",
+        "sudo /tmp/setup.sh",
     ]
   }
 }

@@ -1,5 +1,7 @@
 # Benchmarks
 
+**Updated: May 23, 2020**
+
 Tests performance of various load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/. Note that I did update the NGINX config to use `upstream` with a few recommended defaults so that it was somewhat more fair.
 
 NOTE: I got VERY different results from what Loggly reported. They reported Envoy as being far ahead in performance. I saw that
@@ -26,7 +28,7 @@ Perform these steps:
 terraform init
 terraform apply -auto-approve -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secret_key=<YOUR_SECRET_KEY>'
 ```
-3. Log into a server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>`
+3. Log into a server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>` and run Hey against one of the other servers.
 
 To tear down the servers:
 
@@ -37,7 +39,7 @@ terraform destroy -force -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secre
 Test with: https://github.com/rakyll/hey. It should be installed already on each VM in /home/ubuntu. You should SSH into one of the AWS VMs and run the benchmarking tool from there so that you do not run into latency.
 
 ```
-hey -n 100000 -c 250 -m GET http://<IP_ADDRESS>
+/tmp/hey -n 100000 -c 250 -m GET http://<IP_ADDRESS>
 ```
 
 Or with Apache Bench:
@@ -50,216 +52,245 @@ sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 
 ![alt text](images/requests_per_second.png "Requests per second")
 
+![alt text](images/avg_response_time.png "Average response time")
+
 ![alt text](images/latency.png "Latency")
 
-![alt text](images/cpu.png "CPU Usage")
+*Graphs created using https://www.rapidtables.com/tools/bar-graph.html*
 
-### Envoy (version 1.11.0)
+### Caddy (2.0.0)
 
 ```
 Summary:
-  Total:        3.2221 secs
-  Slowest:      0.0421 secs
-  Fastest:      0.0003 secs
+  Total:        63.5207 secs
+  Slowest:      4.5481 secs
+  Fastest:      0.0004 secs
+  Average:      0.1584 secs
+  Requests/sec: 1574.2896
+  
+  Total data:   17136384 bytes
+  Size/request: 171 bytes
+
+Response time histogram:
+  0.000 [1]     |
+  0.455 [86732] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.910 [7721]  |■■■■
+  1.365 [3755]  |■■
+  1.819 [1352]  |■
+  2.274 [287]   |
+  2.729 [95]    |
+  3.184 [46]    |
+  3.639 [10]    |
+  4.093 [0]     |
+  4.548 [1]     |
+
+
+Latency distribution:
+  10% in 0.0085 secs
+  25% in 0.0168 secs
+  50% in 0.0251 secs
+  75% in 0.0428 secs
+  90% in 0.6543 secs
+  95% in 0.9590 secs
+  99% in 1.5680 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0000 secs, 0.0004 secs, 4.5481 secs
+  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0026 secs
+  resp wait:    0.1583 secs, 0.0004 secs, 4.5481 secs
+  resp read:    0.0000 secs, 0.0000 secs, 0.0046 secs
+
+Status code distribution:
+  [200] 89252 responses
+  [502] 10748 responses
+```
+
+
+### Envoy (1.14.1)
+
+```
+Summary:
+  Total:        3.2472 secs
+  Slowest:      0.2234 secs
+  Fastest:      0.0004 secs
   Average:      0.0079 secs
-  Requests/sec: 31035.4910
+  Requests/sec: 30795.4879
   
   Total data:   26700000 bytes
   Size/request: 267 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.005 [26920] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.009 [34094] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.013 [24994] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.017 [9787]  |■■■■■■■■■■■
-  0.021 [2870]  |■■■
-  0.025 [872]   |■
-  0.030 [290]   |
-  0.034 [119]   |
-  0.038 [37]    |
-  0.042 [16]    |
+  0.023 [99503] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.045 [252]   |
+  0.067 [225]   |
+  0.090 [15]    |
+  0.112 [0]     |
+  0.134 [0]     |
+  0.157 [0]     |
+  0.179 [0]     |
+  0.201 [0]     |
+  0.223 [4]     |
 
 
 Latency distribution:
-  10% in 0.0023 secs
-  25% in 0.0043 secs
-  50% in 0.0074 secs
-  75% in 0.0106 secs
-  90% in 0.0140 secs
-  95% in 0.0164 secs
-  99% in 0.0224 secs
+  10% in 0.0037 secs
+  25% in 0.0052 secs
+  50% in 0.0071 secs
+  75% in 0.0098 secs
+  90% in 0.0130 secs
+  95% in 0.0146 secs
+  99% in 0.0191 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.0421 secs
+  DNS+dialup:   0.0000 secs, 0.0004 secs, 0.2234 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0206 secs
-  resp wait:    0.0077 secs, 0.0003 secs, 0.0418 secs
-  resp read:    0.0001 secs, 0.0000 secs, 0.0070 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0064 secs
+  resp wait:    0.0076 secs, 0.0003 secs, 0.2153 secs
+  resp read:    0.0002 secs, 0.0000 secs, 0.0078 secs
 
 Status code distribution:
   [200] 100000 responses
 ```
 
-### NGINX (version 1.10.3)
+### HAProxy (2.1.4)
 
 ```
 Summary:
-  Total:        3.1544 secs
-  Slowest:      1.0094 secs
-  Fastest:      0.0002 secs
-  Average:      0.0076 secs
-  Requests/sec: 31702.2366
-  
-  Total data:   12700000 bytes
-  Size/request: 127 bytes
-
-Response time histogram:
-  0.000 [1]     |
-  0.101 [99994] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.202 [0]     |
-  0.303 [1]     |
-  0.404 [0]     |
-  0.505 [0]     |
-  0.606 [0]     |
-  0.707 [0]     |
-  0.808 [0]     |
-  0.909 [0]     |
-  1.009 [4]     |
-
-
-Latency distribution:
-  10% in 0.0015 secs
-  25% in 0.0037 secs
-  50% in 0.0068 secs
-  75% in 0.0100 secs
-  90% in 0.0141 secs
-  95% in 0.0176 secs
-  99% in 0.0275 secs
-
-Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0002 secs, 1.0094 secs
-  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0193 secs
-  resp wait:    0.0075 secs, 0.0002 secs, 1.0094 secs
-  resp read:    0.0001 secs, 0.0000 secs, 0.0080 secs
-
-Status code distribution:
-  [200] 100000 responses
-```
-
-### HAProxy (version 2.0)
-
-```
-Summary:
-  Total:        2.7764 secs
-  Slowest:      0.0467 secs
+  Total:        2.3783 secs
+  Slowest:      0.2135 secs
   Fastest:      0.0003 secs
-  Average:      0.0068 secs
-  Requests/sec: 36017.9772
+  Average:      0.0058 secs
+  Requests/sec: 42047.1646
   
   Total data:   13700000 bytes
   Size/request: 137 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.005 [37766] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.010 [39441] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.014 [16488] |■■■■■■■■■■■■■■■■■
-  0.019 [4413]  |■■■■
-  0.023 [1262]  |■
-  0.028 [432]   |
-  0.033 [153]   |
-  0.037 [41]    |
-  0.042 [2]     |
-  0.047 [1]     |
+  0.022 [99130] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.043 [618]   |
+  0.064 [129]   |
+  0.086 [116]   |
+  0.107 [2]     |
+  0.128 [0]     |
+  0.150 [0]     |
+  0.171 [0]     |
+  0.192 [0]     |
+  0.213 [4]     |
 
 
 Latency distribution:
-  10% in 0.0014 secs
-  25% in 0.0035 secs
-  50% in 0.0062 secs
-  75% in 0.0092 secs
-  90% in 0.0126 secs
-  95% in 0.0150 secs
-  99% in 0.0215 secs
+  10% in 0.0016 secs
+  25% in 0.0028 secs
+  50% in 0.0047 secs
+  75% in 0.0075 secs
+  90% in 0.0108 secs
+  95% in 0.0135 secs
+  99% in 0.0207 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.0467 secs
+  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.2135 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0128 secs
-  resp wait:    0.0066 secs, 0.0002 secs, 0.0467 secs
-  resp read:    0.0001 secs, 0.0000 secs, 0.0109 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0069 secs
+  resp wait:    0.0052 secs, 0.0003 secs, 0.2083 secs
+  resp read:    0.0004 secs, 0.0000 secs, 0.0118 secs
 
 Status code distribution:
   [200] 100000 responses
 ```
 
-### Traefik (version 2.0)
+### NGINX (1.18.0)
 
 ```
 Summary:
-  Total:        4.0268 secs
-  Slowest:      0.2627 secs
+  Total:        3.4153 secs
+  Slowest:      1.0014 secs
   Fastest:      0.0003 secs
-  Average:      0.0099 secs
-  Requests/sec: 24833.6670
+  Average:      0.0070 secs
+  Requests/sec: 29280.0239
   
-  Total data:   30500000 bytes
-  Size/request: 305 bytes
+  Total data:   12700000 bytes
+  Size/request: 127 bytes
 
 Response time histogram:
   0.000 [1]     |
-  0.027 [99240] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.053 [580]   |
-  0.079 [66]    |
-  0.105 [107]   |
-  0.132 [0]     |
-  0.158 [0]     |
-  0.184 [0]     |
-  0.210 [0]     |
-  0.236 [4]     |
-  0.263 [2]     |
+  0.100 [99970] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.200 [2]     |
+  0.301 [10]    |
+  0.401 [0]     |
+  0.501 [0]     |
+  0.601 [0]     |
+  0.701 [0]     |
+  0.801 [0]     |
+  0.901 [0]     |
+  1.001 [17]    |
 
 
 Latency distribution:
-  10% in 0.0046 secs
-  25% in 0.0067 secs
-  50% in 0.0090 secs
-  75% in 0.0122 secs
-  90% in 0.0160 secs
-  95% in 0.0185 secs
-  99% in 0.0249 secs
+  10% in 0.0022 secs
+  25% in 0.0037 secs
+  50% in 0.0059 secs
+  75% in 0.0090 secs
+  90% in 0.0125 secs
+  95% in 0.0150 secs
+  99% in 0.0222 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0000 secs, 0.0003 secs, 0.2627 secs
+  DNS+dialup:   0.0000 secs, 0.0003 secs, 1.0014 secs
   DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
-  req write:    0.0000 secs, 0.0000 secs, 0.0054 secs
-  resp wait:    0.0097 secs, 0.0003 secs, 0.2586 secs
-  resp read:    0.0001 secs, 0.0000 secs, 0.0063 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0119 secs
+  resp wait:    0.0067 secs, 0.0002 secs, 1.0013 secs
+  resp read:    0.0002 secs, 0.0000 secs, 0.0274 secs
 
 Status code distribution:
   [200] 100000 responses
 ```
 
-## CPU and Memory usage during tests
+### Traefik (2.2.1)
 
-Envoy:
+```
+Summary:
+  Total:        4.4349 secs
+  Slowest:      0.1098 secs
+  Fastest:      0.0004 secs
+  Average:      0.0110 secs
+  Requests/sec: 22548.4699
+  
+  Total data:   30300000 bytes
+  Size/request: 303 bytes
 
-CPU: 280.7%
-Memory: 0.3
+Response time histogram:
+  0.000 [1]     |
+  0.011 [63128] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.022 [34843] |■■■■■■■■■■■■■■■■■■■■■■
+  0.033 [1574]  |■
+  0.044 [193]   |
+  0.055 [93]    |
+  0.066 [80]    |
+  0.077 [15]    |
+  0.088 [1]     |
+  0.099 [39]    |
+  0.110 [33]    |
 
-NGINX:
 
-CPU: 100%
-Memory: 0.0
+Latency distribution:
+  10% in 0.0062 secs
+  25% in 0.0081 secs
+  50% in 0.0099 secs
+  75% in 0.0131 secs
+  90% in 0.0164 secs
+  95% in 0.0188 secs
+  99% in 0.0257 secs
 
-HAProxy:
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0000 secs, 0.0004 secs, 0.1098 secs
+  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0156 secs
+  resp wait:    0.0108 secs, 0.0004 secs, 0.0997 secs
+  resp read:    0.0001 secs, 0.0000 secs, 0.0077 secs
 
-CPU: 63.3%
-Memory: 0.1%
-
-Traefik:
-
-CPU: 366%
-Memory: 0.5%
+Status code distribution:
+  [200] 100000 responses
+```
