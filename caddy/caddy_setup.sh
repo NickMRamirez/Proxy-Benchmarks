@@ -13,7 +13,7 @@ if [ ! $(which docker) ]; then
 fi
 
 # Run the Docker container
-docker run -d -p 8080:8080 -p 80:9898 -v /tmp/Caddyfile:/etc/caddy/Caddyfile  caddy/caddy:2.0.0-alpine
+docker run -d -p 8080:8080 -p 80:80 -v /tmp/Caddyfile:/etc/caddy/Caddyfile  caddy/caddy:2.0.0-alpine
 
 # Install Hey
 wget -O hey https://storage.googleapis.com/hey-release/hey_linux_amd64
