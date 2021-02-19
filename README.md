@@ -39,7 +39,7 @@ terraform destroy -force -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secre
 Test with: https://github.com/rakyll/hey. It should be installed already on each VM in /home/ubuntu. You should SSH into one of the AWS VMs and run the benchmarking tool from there so that you do not run into latency.
 
 ```
-/tmp/hey -n 100000 -c 250 -m GET http://<IP_ADDRESS>
+./hey -n 100000 -c 250 -m GET http://<IP_ADDRESS>
 ```
 
 Or with Apache Bench:
