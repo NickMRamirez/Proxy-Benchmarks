@@ -13,8 +13,8 @@ if [ ! $(which docker) ]; then
 fi
 
 # Run the Docker container
-docker run -d -p 80:80 -v /tmp/nginx.conf:/etc/nginx/nginx.conf nginx:1.18.0
+docker run -d -p 80:80 -v /tmp/nginx.conf:/etc/nginx/nginx.conf nginx:1.19.7
 
 # Install Hey
-wget -O hey https://storage.googleapis.com/hey-release/hey_linux_amd64
+wget -O hey https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64
 chmod +x ./hey
