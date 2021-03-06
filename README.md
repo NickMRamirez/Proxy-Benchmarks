@@ -12,7 +12,7 @@ HAProxy is ahead. Note that you can install HAProxy using the packages here: htt
 Defaults to the AWS "US-East-2 (Ohio)" region.
 
 NOTE: The AWS plugin for Terraform can be finicky. The deployment may or may not work the first time. In that case, 
-use `terraform taint aws_instance.envoy` for example to try it again.
+use `terraform taint aws_instance.proxy_server` for example to try it again.
 
 ## Setup
 
@@ -28,7 +28,7 @@ Perform these steps:
 terraform init
 terraform apply -auto-approve -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secret_key=<YOUR_SECRET_KEY>'
 ```
-3. Log into a server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>` and run Hey against one of the other servers.
+3. Log into the *client* server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>` and run Hey against one of the other servers.
 
 To tear down the servers:
 
