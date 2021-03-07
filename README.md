@@ -2,12 +2,17 @@
 
 **Updated: February 21, 2021**
 
-Tests performance of various load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/. Note that I did update the NGINX config to use `upstream` with a few recommended defaults so that it was somewhat more fair.
+Tests performance of various proxies/load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/.
 
-NOTE: I got VERY different results from what Loggly reported. They reported Envoy as being far ahead in performance. I saw that
-HAProxy is ahead. Note that you can install HAProxy using the packages here: https://haproxy.debian.net. The Terraform installation automates this.
+We test the following proxies:
 
-**IMPORTANT! Be sure to SSH into one of the VMs and run the test against the other VM from there. Running the test from within the AWS VPC will reduce Internet latency.**
+* Caddy
+* Envoy
+* HAProxy
+* NGINX
+* Traefik
+
+**IMPORTANT! Be sure to SSH into the client VM and run the test against the proxy_server VM from there. Running the test from within the AWS VPC will reduce Internet latency.**
 
 Defaults to the AWS "US-East-2 (Ohio)" region.
 
@@ -28,24 +33,18 @@ Perform these steps:
 terraform init
 terraform apply -auto-approve -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secret_key=<YOUR_SECRET_KEY>'
 ```
-3. Log into the *client* server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>` and run Hey against one of the other servers.
+3. Log into the *client* server with `ssh -i ./benchmarks.pem ubuntu@<IP_ADDRESS>` and run the tests:
+
+```
+/tmp/run_tests.sh | tee results.txt
+```
+
+Performance tests use https://github.com/rakyll/hey.
 
 To tear down the servers:
 
 ```
 terraform destroy -force -var 'aws_access_key=<YOUR_ACCESS_KEY>' -var 'aws_secret_key=<YOUR_SECRET_KEY>'
-```
-
-Test with: https://github.com/rakyll/hey. It should be installed already on each VM in /home/ubuntu. You should SSH into one of the AWS VMs and run the benchmarking tool from there so that you do not run into latency.
-
-```
-./hey -n 100000 -c 250 -m GET http://<IP_ADDRESS>
-```
-
-Or with Apache Bench:
-
-```
-sudo ab -n 100000 -c 250 -m GET http://<IP_ADDRESS>/
 ```
 
 ## Results using Hey

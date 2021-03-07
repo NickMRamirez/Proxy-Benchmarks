@@ -102,6 +102,11 @@ resource "aws_instance" "client" {
   }
 
   provisioner "file" {
+    source      = "./client/run_tests.sh"
+    destination = "/tmp/run_tests.sh"
+  }
+
+  provisioner "file" {
     source      = "./client/client_setup.sh"
     destination = "/tmp/client_setup.sh"
   }
@@ -169,6 +174,7 @@ resource "aws_instance" "proxy_server" {
   subnet_id              = aws_subnet.benchmarks.id
   vpc_security_group_ids = [aws_security_group.benchmarks.id]
   key_name               = var.ssh_keypair_name
+  private_ip             = "192.168.0.11"
   depends_on             = [aws_instance.webserver]
 
   tags = {
@@ -204,10 +210,6 @@ module "caddy" {
   ssh_keypair_name = var.ssh_keypair_name
 }
 
-output "caddy" {
-    value = "http://${aws_instance.proxy_server.public_ip}:8000"
-}
-
 # -----------------------------------------------------------------
 #                     envoy
 # -----------------------------------------------------------------
@@ -215,10 +217,6 @@ module "envoy" {
   source = "./envoy"
   proxy_server_public_ip = aws_instance.proxy_server.public_ip
   ssh_keypair_name = var.ssh_keypair_name
-}
-
-output "envoy" {
-    value = "http://${aws_instance.proxy_server.public_ip}:8001"
 }
 
 # -----------------------------------------------------------------
@@ -230,11 +228,6 @@ module "haproxy" {
   ssh_keypair_name = var.ssh_keypair_name
 }
 
-output "haproxy" {
-    value = "http://${aws_instance.proxy_server.public_ip}:8002"
-}
-
-
 # -----------------------------------------------------------------
 #                     nginx
 # -----------------------------------------------------------------
@@ -244,10 +237,6 @@ module "nginx" {
   ssh_keypair_name = var.ssh_keypair_name
 }
 
-output "nginx" {
-    value = "http://${aws_instance.proxy_server.public_ip}:8003"
-}
-
 # -----------------------------------------------------------------
 #                     traefik
 # -----------------------------------------------------------------
@@ -255,8 +244,4 @@ module "traefik" {
   source = "./traefik"
   proxy_server_public_ip = aws_instance.proxy_server.public_ip
   ssh_keypair_name = var.ssh_keypair_name
-}
-
-output "traefik" {
-    value = "http://${aws_instance.proxy_server.public_ip}:8004"
 }
