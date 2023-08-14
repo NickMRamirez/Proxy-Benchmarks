@@ -1,7 +1,5 @@
 # Benchmarks
 
-**Updated: February 21, 2021**
-
 Tests performance of various proxies/load balancers. Based on the blog post https://www.loggly.com/blog/benchmarking-5-popular-load-balancers-nginx-haproxy-envoy-traefik-and-alb/.
 
 We test the following proxies:
